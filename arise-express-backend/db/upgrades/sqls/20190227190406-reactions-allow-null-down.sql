@@ -1,0 +1,1 @@
+ALTER TABLE Reactions MODIFY UserMediaUrl varchar(1000) NOT NULL;

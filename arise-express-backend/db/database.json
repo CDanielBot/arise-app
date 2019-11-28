@@ -1,0 +1,37 @@
+{
+  "defaultEnv": {
+    "ENV": "DB_MIGRATE_ENV"
+  },
+  "docker": {
+    "driver": "mysql",
+    "user": { "ENV": "DB_USER" },
+    "password": { "ENV": "DB_PASSWORD" },
+    "host": { "ENV": "DB_HOST" },
+    "database": { "ENV": "DB_DATABASE" },
+    "multipleStatements": true
+  },
+  "dev": {
+    "driver": "mysql",
+    "user": "root",
+    "password": "root",
+    "host": "localhost",
+    "database": "arise4c_devdb_arctec",
+    "multipleStatements": true
+  },
+  "test": {
+    "driver": "mysql",
+    "user": "arise4c_arctec",
+    "password": "arise4c.arctec",
+    "host": "localhost",
+    "database": "arise4c_testdb_arctec",
+    "multipleStatements": true
+  },
+  "prod": {
+    "driver": "mysql",
+    "user": "arise4c_user",
+    "password": "dbarise4c!",
+    "host": "localhost",
+    "database": "arise4c_arisefor_afcdb",
+    "multipleStatements": true
+  }
+}

@@ -1,0 +1,19 @@
+version: "3"
+services:
+  api:
+    image: "registry.gitlab.com/arctec/arise4c/backendapi:latest"
+    environment:
+      - NODE_ENV=docker
+    links:
+      - db:mysql
+    ports:
+      - "3001:3001"
+  db:
+    image: mysql:5.6
+    environment:
+      - MYSQL_DATABASE=arise4c_devdb
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - "./dumps/arise4c_devdb_4arctec-20.02.2019.sql:/docker-entrypoint-initdb.d/dump.sql"
+    ports:
+      - "3306:3306"

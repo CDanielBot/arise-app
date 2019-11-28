@@ -1,0 +1,6 @@
+ALTER TABLE Users MODIFY Description text NULL;
+ALTER TABLE Users MODIFY Mobile varchar(255) NULL DEFAULT '';
+ALTER TABLE Users MODIFY Zone varchar(250) NULL DEFAULT '';
+ALTER TABLE Users MODIFY Country varchar(250) NULL DEFAULT '';
+ALTER TABLE Users MODIFY MediaUrl varchar(1000) NULL DEFAULT '';
+ALTER TABLE Users MODIFY LastLogin datetime NULL DEFAULT '1970-01-01 08:00:00';

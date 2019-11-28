@@ -1,0 +1,6 @@
+export { default as UserEndpoints } from './UserEndpoints'
+export { default as PostEndpoints } from './PostEndpoints'
+export { default as EvangelismRequestEndpoints } from './EvangelismRequestEndpoints'
+export { default as CommentEndpoints } from './CommentEndpoints'
+export { default as PrayerEndpoints } from './PrayerEndpoints'
+export { default as BibleEndpoints } from './BibleEndpoints'

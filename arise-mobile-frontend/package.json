@@ -1,0 +1,46 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^9.0.0",
+    "axios": "^0.18.0",
+    "axios-middleware": "^0.3.1",
+    "expo": "^32.0.0",
+    "firebase": "^5.7.2",
+    "install": "^0.12.2",
+    "lottie-react-native": "^2.5.11",
+    "moment": "^2.24.0",
+    "npm": "^6.5.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.6.3",
+    "react-native": "^0.57.1",
+    "react-native-animatable": "^1.3.1",
+    "react-native-lightbox": "^0.8.0",
+    "react-native-modal": "^9.0.0",
+    "react-native-vector-icons": "^6.1.0",
+    "react-navigation": "^3.2.0",
+    "react-navigation-transitions": "^1.0.8",
+    "react-redux": "^6.0.0",
+    "realm": "^2.26.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
+    "styled-components": "^4.1.3",
+    "yup": "^0.26.10"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0",
+    "redux-devtools-extension": "^2.13.7"
+  },
+  "private": true,
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "printWidth": 100
+  }
+}

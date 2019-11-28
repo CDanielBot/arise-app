@@ -1,0 +1,1 @@
+ALTER TABLE Posts ADD COLUMN Type_Mobile varchar(50) NULL DEFAULT '';

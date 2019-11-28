@@ -1,0 +1,11 @@
+ALTER TABLE EvangelismRequests MODIFY Name varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY Email varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY Phone varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY Address varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY Age varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY Occupation varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY EducationLevel varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY Religion varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY AttitudeTowardsChristianity varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY OtherDetails varchar(255) NULL DEFAULT '';
+ALTER TABLE EvangelismRequests MODIFY Stage varchar(255) NULL DEFAULT '';

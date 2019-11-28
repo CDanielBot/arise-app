@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "pray-for-evangelism",
+    "slug": "pray-for-evangelism",
+    "privacy": "public",
+    "sdkVersion": "32.0.0",
+    "platforms": ["ios", "android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "extra": {
+      "providers": {
+        "facebookAppId": "2349470185076610",
+        "iosGoogleAppId": "1049379048416-999rftmg9gnmip5v96eejpsr5d9vqvll.apps.googleusercontent.com",
+        "androidGoogleAppId": "1049379048416-8au1e9dpafc12hikovelqiaj5mpo42mn.apps.googleusercontent.com"
+      }
+    }
+  }
+}

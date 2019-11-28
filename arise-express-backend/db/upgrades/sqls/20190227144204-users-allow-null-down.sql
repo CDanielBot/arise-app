@@ -1,0 +1,5 @@
+ALTER TABLE Users MODIFY Mobile varchar(255) NOT NULL;
+ALTER TABLE Users MODIFY Zone varchar(250) NOT NULL;
+ALTER TABLE Users MODIFY Country varchar(250) NOT NULL;
+ALTER TABLE Users MODIFY MediaUrl varchar(1000) NOT NULL DEFAULT '';
+ALTER TABLE Users MODIFY LastLogin datetime NOT NULL;

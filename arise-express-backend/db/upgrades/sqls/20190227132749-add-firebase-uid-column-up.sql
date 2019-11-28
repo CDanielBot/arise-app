@@ -1,0 +1,2 @@
+ALTER TABLE Users DROP COLUMN FacebookId;
+ALTER TABLE Users ADD COLUMN FirebaseUid varchar(36) NULL DEFAULT '';

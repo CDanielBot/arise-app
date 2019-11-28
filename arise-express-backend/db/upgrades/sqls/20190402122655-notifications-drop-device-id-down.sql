@@ -1,0 +1,1 @@
+ALTER TABLE Notifications ADD COLUMN TargetDeviceId int(11) UNSIGNED NOT NULL DEFAULT '0';

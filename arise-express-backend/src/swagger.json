@@ -1,0 +1,1437 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API documentation for Arise Mobile App Rest endpoints.",
+    "version": "1.0.0",
+    "title": "Arise API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "botdaniel11@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3001",
+  "basePath": "/api/v1",
+
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    
+    "/ping": {
+      "get": {
+        "tags": [
+          "ping"
+        ],
+        "summary": "Test if backend is working",
+        "responses": {
+          "200": {
+            "description": "Success. Backend works."
+          },
+          "404": {
+            "description": "Backend not working."
+          }
+        }
+      }
+    },
+    
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create user",
+        "description": "",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "User",
+            "description": "Creates a new user with email & password into the system. Default language if not set: romanian.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. Returns user id.",
+            "schema": {
+              "$ref": "#/definitions/UserIdResp"
+            }
+          },
+          "400": {
+            "description": "Invalid User passed as body. Please see our request model."
+          },
+          "500": {
+            "description": "Internal error. The user could not be created. A json error is returned."
+          }
+        }
+      }
+    },
+    
+    "/users/register": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Register user from social media (facebook + gmail) in app",
+        "description": "",
+        "operationId": "registerUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "User",
+            "description": "Registers a social media user in app.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. Returns user id.",
+            "schema": {
+              "$ref": "#/definitions/UserIdResp"
+            }
+          },
+          "400": {
+            "description": "Invalid Firebase Uid passed as body. Please see our request model."
+          },
+          "500": {
+            "description": "Internal error. The user could not be created. A json error is returned."
+          }
+        }
+      }
+    },
+    
+    "/users/login": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Logs user (with email and password) into the system.",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "User",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserCredentials"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/LoginResp"
+            },
+            "headers": {
+              "Authorization": {
+                "type": "string",
+                "description": "Generated token for UI (Bearer TOKEN_String). You should use this token and sign in with him in firebase, then obtain the real token. This new token should be sent in upcoming requests as 'Authorization: Bearer {token}' for authentication."
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email/password supplied"
+          },
+          "500": {
+            "description": "Internal error when trying to log user in"
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/changePassword": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Change password for a logged in user that knows its current password.",
+        "description": "",
+        "operationId": "changePassword",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/UpdatedResponse"
+            }
+          },
+          "400": {
+            "description": "User not found or provided password is not correct."
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get user by user id",
+        "description": "",
+        "operationId": "getUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user that needs to be fetched.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "User not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id of the user that needs to be updated.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "in": "body",
+            "name": "User",
+            "description": "Updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. Returns number of updated rows in db. It should be 1."
+          },
+          "400": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Error updating user."
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/evangelismRequests": {
+      "get": {
+        "tags": [
+          "evangelismRequests"
+        ],
+        "summary": "Get evangelism requests for a specific user.",
+        "description": "",
+        "operationId": "getEvangelismRequests",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user for whom evangelism requests are loaded.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/UserEvangelismRequests"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "evangelismRequests"
+        ],
+        "summary": "Add a new evangelism request. Id and UserId are not mandatory to be passed in body.",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "addEvangelismRequest",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id of the user that adds an evangelism request.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "in": "body",
+            "name": "EvangelismRequest",
+            "description": "User adds a new evangelism Request.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EvangelismRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. Returns the id of the newly added evangelism request."
+          },
+          "500": {
+            "description": "Error adding evangelism request."
+          }
+        }
+      }
+    },
+
+    "/users/{userId}/evangelismRequests/{requestId}": {
+      "delete": {
+        "tags": [
+          "evangelismRequests"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success."
+          },
+          "500": {
+            "description": "Error deleting evangelism request."
+          }
+        }
+      }
+    },
+
+    "/evangelismRequests/count": {
+      "get": {
+        "tags": [
+          "evangelismRequests"
+        ],
+        "summary": "Count all evangelism requests made by all users.",
+        "description": "",
+        "operationId": "countEvangelismRequests",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/Counter"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/prayerRequests": {
+      "get": {
+        "tags": [
+          "prayerRequests"
+        ],
+        "summary": "Get prayer requests for a specific user.",
+        "description": "",
+        "operationId": "getPrayerRequests",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user for whom prayer requests are loaded.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/UserPrayerRequests"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "prayerRequests"
+        ],
+        "summary": "User adds a new prayer request.",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "addPrayerRequest",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id of the user that adds a prayer request.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "in": "body",
+            "name": "PrayerRequest",
+            "description": "Prayer Request to be added.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PrayerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. Returns the id of the newly added prayer request."
+          },
+          "500": {
+            "description": "Error adding evangelism request."
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/prayerSubscriptions": {
+      "get": {
+        "tags": [
+          "prayerSubscriptions"
+        ],
+        "summary": "Get prayer subscriptions for a specific user.",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user for whom prayer subscriptions are loaded.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/UserPrayerSubscriptions"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/prayerSubscriptions/{subscriptionId}": {
+      "delete": {
+        "tags": [
+          "prayerSubscriptions"
+        ],
+        "summary": "Unsubscribe user from a given prayer subscription",
+        "description": "This can only be done by the logged in user.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "id of the user that adds a prayer request.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "id of the subscription to be removed",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success."
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/reactions": {
+      "post": {
+        "tags": [
+          "reactions"
+        ],
+        "summary": "Create new reaction for a specific post by a specific user.",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user for whom reactions are loaded.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "reaction",
+            "in": "body",
+            "required": true,
+             "schema": {
+              "$ref": "#/definitions/CreateReactionReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/UserPrayerSubscriptions"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/reactions/{reactionId}": {
+      "delete": {
+        "tags": [
+          "reactions"
+        ],
+        "summary": "Remove a specific reaction for a given post",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "reactionId",
+            "in": "path",
+            "description": "id of the reaction to be removed",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success."
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    
+    "/users/{userId}/notifications": {
+      "get": {
+        "tags": [
+          "notifications"
+        ],
+        "summary": "Load notifications for a specific user.",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user for whom prayer requests are loaded.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/Notifications"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      }
+    },
+    "/users/{userId}/notifications/count": {
+      "get": {
+        "tags": [
+          "notifications"
+        ],
+        "summary": "Count unseen notifications for a specific user.",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user for whom prayer requests are loaded.",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/Counter"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      }
+    },
+    "/users/{userId}/notifications/seen": {
+      "put": {
+        "tags": [
+          "notifications"
+        ],
+        "summary": "Update notifications as seen for a specific user.",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The id of the user for whom prayer requests are loaded.",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "in": "body",
+            "name": "NotificationIds",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NotificationIds"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "schema": {
+              "$ref": "#/definitions/Counter"
+            }
+          },
+          "500": {
+            "description": "Internal error."
+          }
+        }
+      }
+    },
+    
+    "/posts": {
+      "get": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "Load content for wall.",
+        "description": "",
+        "operationId": "loadContent",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Limit",
+            "type": "number",
+            "required": false,
+            "description": "Limits the number of content posts to be loaded in the call. If missing, 10 is the default value. "
+          },
+          {
+            "in": "query",
+            "name": "Offset",
+            "type": "number",
+            "required": true,
+            "description": "Specifies the offset for next batch. Posts are loaded ordered desc by creation date, so it's important to specify how many posts to skip in our order. Mandatory value! Must be a multiple of Limit!"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. Returns the next batch of content posts.",
+            "schema": {
+              "$ref": "#/definitions/WallPosts"
+            }
+          },
+          "500": {
+            "description": "Internal error. The user could not be created. A json error is returned."
+          }
+        }
+      }
+    },
+    "/posts/{postId}/comments": {
+      "parameters": [
+        {
+          "name": "postId",
+          "in": "path",
+          "description": "Post id",
+          "required": true,
+          "type": "number"
+        }
+      ],
+      "get": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Load comments for a given post.",
+        "description": "",
+        "operationId": "loadComments",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: comments for post",
+            "schema": {
+              "$ref": "#/definitions/Comments"
+            }
+          },
+          "500": {
+            "description": "Internal error: could not load comments."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Creates a new comment for a given post.",
+        "description": "",
+        "operationId": "addComment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Comment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCommentReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: comment id returned",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "CommentId": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data passed to backend. See response.error.message for details."
+          },
+          "500": {
+            "description": "Internal error. The comement could not be added."
+          }
+        }
+      }
+    },
+    "/users/{userId}/comments/{commentId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "description": "User id",
+          "required": true,
+          "type": "number"
+        },
+        {
+          "name": "commentId",
+          "in": "path",
+          "description": "Comment id",
+          "required": true,
+          "type": "number"
+        }
+      ],
+      "put": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Load comments for a given post.",
+        "description": "",
+        "operationId": "updateComments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Comment",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Comment": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: Comment updated.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Updated": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error: could not update comment."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Deletes comment",
+        "description": "",
+        "operationId": "deleteComment",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: deleted",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "Deleted": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data passed to backend. See response.error.message for details."
+          },
+          "500": {
+            "description": "Internal error. The comement could not be deleted."
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "UserCredentials": {
+      "type": "object",
+      "properties": {
+        "Email": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      }
+    },
+    "RegisterUserReq": {
+      "type": "object",
+      "properties": {
+        "Email": {
+          "type": "string"
+        },
+        "FirstName": {
+          "type": "string"
+        },
+        "LastName": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateUserReq": {
+      "type": "object",
+      "properties": {
+        "Email": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "Language": {
+          "type": "string",
+          "enum": [
+            "ro",
+            "en"
+          ]
+        },
+        "FirstName": {
+          "type": "string"
+        },
+        "LastName": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUserReq": {
+      "type": "object",
+      "properties": {
+        "FirstName": {
+          "type": "string"
+        },
+        "LastName": {
+          "type": "string"
+        },
+        "Mobile": {
+          "type": "string"
+        },
+        "Email": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Country": {
+          "type": "string"
+        },
+        "Language": {
+          "type": "string",
+          "enum": [
+            "ro",
+            "en"
+          ]
+        }
+      }
+    },
+    "UserIdResp": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "UserId": {
+              "type": "number"
+            },
+            "FirebaseUid": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "LoginResp": {
+      "type": "object",
+      "properties": {
+        "Token": {
+          "type": "string"
+        },
+        "Type": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "UserId": {
+          "type": "number"
+        },
+        "FirstName": {
+          "type": "string"
+        },
+        "LastName": {
+          "type": "string"
+        },
+        "Mobile": {
+          "type": "string"
+        },
+        "Email": {
+          "type": "string"
+        },
+        "User": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Type": {
+          "type": "string",
+          "enum": [
+            {
+              "0": "Admin"
+            },
+            {
+              "1": "User"
+            },
+            {
+              "2": "Evangelist"
+            },
+            {
+              "3": "PrayerTeam"
+            }
+          ]
+        },
+        "Language": {
+          "type": "string",
+          "enum": [
+            "ro",
+            "en"
+          ]
+        }
+      }
+    },
+    "EvangelismRequest": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "number"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "ApplicantName": {
+          "type": "string"
+        },
+        "ApplicantPhone": {
+          "type": "string"
+        },
+        "ApplicantEmail?": {
+          "type": "string"
+        },
+        "Name?": {
+          "type": "string"
+        },
+        "Email?": {
+          "type": "string"
+        },
+        "Phone?": {
+          "type": "string"
+        }
+      }
+    },
+    "UserEvangelismRequests": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/EvangelismRequest"
+      }
+    },
+    "Notification": {
+      "type": "object",
+      "properties": {
+        "NotificationId": {
+          "type": "number"
+        },
+        "ActionMakerUserId": {
+          "type": "number"
+        },
+         "ActionMakerUsername": {
+          "type": "string"
+        },
+         "TargetUserId": {
+          "type": "number"
+        },
+         "TargetDeviceId": {
+          "type": "number"
+        },
+         "RelatedEntityId": {
+          "type": "number"
+        },
+         "CreationDate": {
+          "type": "string",
+          "format": "date"
+        },
+         "Action": {
+          "type": "string",
+          "enum": [
+            "Comment",
+            "Post",
+            "Reply",
+            "Like",
+            "Pray"
+          ]
+        }
+      }
+    },
+    "Notifications": {
+      "type": "object",
+      "properties": {
+        "Seen": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Notification"
+          }
+        },
+         "Unseen": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Notification"
+          }
+        }
+      }
+    },
+    "NotificationIds": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "PrayerRequest": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "number"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "Title": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Post": {
+          "type": "string"
+        }
+      }
+    },
+    "UserPrayerRequests": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/PrayerRequest"
+      }
+    },
+    "PrayerSubscription": {
+      "type": "object",
+      "properties": {
+        "SubscriptionId": {
+          "type": "number"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "PrayerId": {
+          "type": "number"
+        },
+         "PrayerAuthorId": {
+          "type": "number"
+        },
+         "PrayerAuthorName": {
+          "type": "string"
+        },
+         "PrayerTitle": {
+          "type": "string"
+        },
+        "PrayerContent": {
+          "type": "string"
+        },
+        "CreationDate": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "UserPrayerSubscriptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/PrayerSubscription"
+      }
+    },
+    "Counter": {
+      "type": "object",
+      "properties": {
+        "Counter": {
+          "type": "number"
+        } 
+      }
+    },
+    "CreateReactionReq": {
+      "type": "object",
+      "properties": {
+        "UserId": {
+          "type": "number"
+        },
+        "RelatedPostId": {
+          "type": "number"
+        },
+         "UserFullName": {
+          "type": "string"
+        },
+         "ReactionType": {
+          "type": "string",
+          "enum": [
+            "pray",
+            "like"
+          ]
+        }
+      }
+    },
+    "Comments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Comment"
+      }
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "CommentId": {
+          "type": "number"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "RelatedPostId": {
+          "type": "number"
+        },
+        "RelatedCommentId": {
+          "type": "number"
+        },
+        "CreationDate": {
+          "type": "string",
+          "description": "It's a date representation."
+        },
+        "Comment": {
+          "type": "string"
+        },
+        "Visibility": {
+          "type": "number",
+          "enum": [
+            "NotVisible=0",
+            "Visible=1",
+            "VisibleForCreatorOnly=2"
+          ]
+        }
+      }
+    },
+    "CreateCommentReq": {
+      "type": "object",
+      "properties": {
+        "UserId": {
+          "type": "number"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "RelatedPostId": {
+          "type": "number"
+        },
+        "RelatedCommentId": {
+          "type": "number"
+        },
+        "Comment": {
+          "type": "string"
+        }
+      }
+    },
+    "WallPosts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/WallPost"
+      }
+    },
+    "WallPost": {
+      "type": "object",
+      "properties": {
+        "PostId": {
+          "type": "number"
+        },
+        "UserId": {
+          "type": "number"
+        },
+        "Author": {
+          "type": "string"
+        },
+        "FirstName": {
+          "type": "string"
+        },
+        "LastName": {
+          "type": "string"
+        },
+        "CreationDate": {
+          "type": "string",
+          "description": "It's a date representation."
+        },
+        "Post": {
+          "type": "string"
+        },
+        "Title": {
+          "type": "string"
+        },
+        "ReactionsCounter": {
+          "type": "number"
+        },
+        "Type": {
+          "type": "string",
+          "enum": [
+            "article",
+            "media",
+            "event",
+            "post",
+            "image"
+          ]
+        },
+        "Phone?": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdatedResponse": {
+       "type": "object",
+      "properties": {
+        "Updated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
